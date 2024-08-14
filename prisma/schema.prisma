@@ -33,13 +33,13 @@ model Review {
     rating    Int
     text      String
     productId Int
-    product   Product @relation(fields: [productId], references: [id])
+    product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 }
 
 model Cart {
-    id        Int    @id @default(autoincrement())
-    name      String
+    productId Int    @id
     image     String
+    name      String
     price     Int
     quantity  Int
 }

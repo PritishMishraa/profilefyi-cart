@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 const products = [
     {
         id: 1,
-        image: "/castle-t-shirt.jpg",
+        image: "https://picsum.photos/id/102/4320/3240",
         name: "Castle T-Shirt",
         price: 1250,
         description:
@@ -23,7 +23,7 @@ const products = [
     },
     {
         id: 2,
-        image: "/dragon-t-shirt.jpg",
+        image: "https://picsum.photos/id/103/2592/1936",
         name: "Dragon T-Shirt",
         price: 2500,
         description:
@@ -41,7 +41,7 @@ const products = [
     },
     {
         id: 3,
-        image: "/elf-t-shirt.jpg",
+        image: "https://picsum.photos/id/104/3840/2160",
         name: "Elf T-Shirt",
         price: 2050,
         description:
@@ -59,7 +59,7 @@ const products = [
     },
     {
         id: 4,
-        image: "/wizard-t-shirt.jpg",
+        image: "https://picsum.photos/id/106/2592/1728",
         name: "Wizard T-Shirt",
         price: 2005,
         description:
@@ -77,25 +77,25 @@ const products = [
     },
     {
         id: 5,
-        image: "/wizard-t-shirt-2.jpg",
-        name: "Wizard T-Shirt",
+        image: "https://picsum.photos/id/107/5000/3333",
+        name: "Goblin T-Shirt",
         price: 5200,
         description:
-            "The wizard is powerful and knows many dangerous spells, beware traveller!",
+            "The goblin is powerful and knows many dangerous spells, beware traveller!",
         reviews: [
             {
                 rating: 5,
-                text: "This is the best t-shirt I've ever owned! The wizard design is amazing and the quality is top-notch.",
+                text: "This is the best t-shirt I've ever owned! The goblin design is amazing and the quality is top-notch.",
             },
             {
                 rating: 5,
-                text: "I love this t-shirt! The wizard design is so cool and the fit is perfect. I wear it all the time.",
+                text: "I love this t-shirt! The goblin design is so cool and the fit is perfect. I wear it all the time.",
             },
         ],
     },
     {
         id: 6,
-        image: "/barbarian-t-shirt.jpg",
+        image: "https://picsum.photos/id/108/2000/1333",
         name: "Barbarian T-Shirt",
         price: 5020,
         description:

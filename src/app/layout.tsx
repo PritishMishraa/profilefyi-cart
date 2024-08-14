@@ -6,6 +6,8 @@ import { type Metadata } from "next";
 import { TRPCReactProvider } from "@/trpc/react";
 import CartProvider from "@/store/CartProvider";
 import { api } from "@/trpc/server";
+import { Toaster } from "sonner";
+import Header from "@/components/client/Header";
 
 export const metadata: Metadata = {
   title: "Create T3 App",
@@ -24,8 +26,10 @@ export default async function RootLayout({
       <body>
         <TRPCReactProvider>
           <CartProvider cart={cart}>
+            <Header initalCart={cart} />
             {children}
           </CartProvider>
+          <Toaster richColors position="top-center" />
         </TRPCReactProvider>
       </body>
     </html>
