@@ -138,7 +138,7 @@ export default function CartItems({ initalCart }: { initalCart: Cart[] }) {
                                 success: "Removed from cart",
                                 error: "Failed to remove from cart",
                             })}
-                            className="ml-4 text-red-600"
+                            className="ml-4 text-red-600 hover:underline"
                         >
                             Remove
                         </button>
