@@ -2,7 +2,7 @@ import CartItems from "@/components/client/CartItems";
 import { api, HydrateClient } from "@/trpc/server";
 
 export default async function Cart() {
-  const cart = await api.post.getCart();
+  const cart = await api.cart.getCart();
 
   return (
     <HydrateClient>

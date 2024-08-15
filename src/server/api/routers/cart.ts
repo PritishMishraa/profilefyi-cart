@@ -4,7 +4,7 @@ import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { type Cart } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 
-export const postRouter = createTRPCRouter({
+export const cartRouter = createTRPCRouter({
   getCart: publicProcedure.query(async ({ ctx }) => {
     const cart = await ctx.db.cart.findMany()
     const sortedCart = cart.sort((a, b) => a.productId - b.productId);
@@ -84,6 +84,12 @@ export const postRouter = createTRPCRouter({
   updateQuantity: publicProcedure
     .input(z.object({ productId: z.number(), quantity: z.number() }))
     .mutation(async ({ ctx, input }) => {
+      if (input.quantity < 1) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Quantity must be greater than 0",
+        });
+      }
       const productInCart = await ctx.db.cart.findUnique({
         where: { productId: input.productId },
       });

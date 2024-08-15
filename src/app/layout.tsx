@@ -4,7 +4,6 @@ import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
 
 import { TRPCReactProvider } from "@/trpc/react";
-import CartProvider from "@/store/CartProvider";
 import { api } from "@/trpc/server";
 import { Toaster } from "sonner";
 import Header from "@/components/client/Header";
@@ -19,16 +18,14 @@ export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
 
-  const cart = await api.post.getCart();
+  const cart = await api.cart.getCart();
 
   return (
     <html lang="en" className={`${GeistSans.variable}`}>
       <body>
         <TRPCReactProvider>
-          <CartProvider cart={cart}>
-            <Header initalCart={cart} />
-            {children}
-          </CartProvider>
+          <Header initalCart={cart} />
+          {children}
           <Toaster richColors position="top-center" />
         </TRPCReactProvider>
       </body>

@@ -6,9 +6,11 @@ import Link from "next/link";
 
 export default function Header({ initalCart }: { initalCart: Cart[] }) {
 
-  const cart = api.post.getCart.useQuery(undefined, {
+  const cart = api.cart.getCart.useQuery(undefined, {
     initialData: initalCart,
-    refetchOnWindowFocus: "always"
+    refetchOnWindowFocus: "always",
+    refetchOnMount: false,
+    refetchOnReconnect: false,
   });
 
 

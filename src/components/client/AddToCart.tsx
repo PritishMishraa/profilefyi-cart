@@ -6,20 +6,16 @@ import { toast } from "sonner";
 export default function AddToCart({ productId }: { productId: number }) {
 
   const utils = api.useUtils();
-  const addToCart = api.post.addToCart.useMutation({
+  const addToCart = api.cart.addToCart.useMutation({
     onSuccess: async () => {
-      toast.success("Added to cart");
-      await utils.post.getCart.invalidate();
-    },
-    onError: (err) => {
-      toast.error(err.message);
-    },
+      await utils.cart.getCart.invalidate();
+    }
   });
 
 
   return (
     <button
-      className="mt-6 px-8 py-2 text-lg font-bold text-white bg-blue-800 rounded-lg"
+      className="mt-6 px-8 py-2 text-lg font-bold text-white bg-blue-800 rounded-lg disabled:bg-gray-400 disabled:cursor-not-allowed"
       onClick={() => {
         toast.promise(addToCart.mutateAsync({ productId }), {
           loading: "Adding to cart...",
@@ -27,6 +23,7 @@ export default function AddToCart({ productId }: { productId: number }) {
           error: "Failed to add to cart",
         })
       }}
+      disabled={addToCart.isPending}
     >
       Add To Cart
     </button>

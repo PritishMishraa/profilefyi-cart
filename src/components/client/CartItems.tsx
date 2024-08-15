@@ -7,32 +7,35 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 export default function CartItems({ initalCart }: { initalCart: Cart[] }) {
+    const [discount, setDiscount] = useState<number | null>(null);
 
-    const products = api.post.getCart.useQuery(undefined, {
+    const products = api.cart.getCart.useQuery(undefined, {
         initialData: initalCart,
-        refetchOnWindowFocus: "always"
+        refetchOnWindowFocus: "always",
+        refetchOnMount: false,
+        refetchOnReconnect: false,
     });
 
     const utils = api.useUtils();
-    const clearCart = api.post.clearCart.useMutation({
+    const clearCart = api.cart.clearCart.useMutation({
         onSuccess: async () => {
-            await utils.post.getCart.invalidate();
+            await utils.cart.getCart.invalidate();
         }
     });
 
-    const removeFromCart = api.post.removeFromCart.useMutation({
+    const removeFromCart = api.cart.removeFromCart.useMutation({
         onSuccess: async () => {
-            await utils.post.getCart.invalidate();
+            await utils.cart.getCart.invalidate();
         }
     });
 
-    const updateQuantity = api.post.updateQuantity.useMutation({
+    const updateQuantity = api.cart.updateQuantity.useMutation({
         onMutate: async (newQunatity) => {
-            await utils.post.getCart.cancel();
+            await utils.cart.getCart.cancel();
 
-            const prevData = utils.post.getCart.getData();
+            const prevData = utils.cart.getCart.getData();
 
-            utils.post.getCart.setData(undefined, (old) => {
+            utils.cart.getCart.setData(undefined, (old) => {
                 if (!old) return;
 
                 const newData = old.map((product) => {
@@ -52,17 +55,15 @@ export default function CartItems({ initalCart }: { initalCart: Cart[] }) {
             return prevData;
         },
         onSuccess: async () => {
-            await utils.post.getCart.invalidate();
+            await utils.cart.getCart.invalidate();
         },
-        onError: async (_err, _newPost, ctx) => {
-            utils.post.getCart.setData(undefined, ctx);
+        onError: async (_err, _newcart, ctx) => {
+            utils.cart.getCart.setData(undefined, ctx);
         },
         onSettled: async () => {
-            await utils.post.getCart.invalidate();
+            await utils.cart.getCart.invalidate();
         }
     });
-
-    const [discount, setDiscount] = useState<number | null>(null);
 
     const calculateSubtotal = () => {
         return products.data.reduce((total, product) => total + product.price * product.quantity, 0);
@@ -90,7 +91,13 @@ export default function CartItems({ initalCart }: { initalCart: Cart[] }) {
             {products.data.map((product) => (
                 <div key={product.productId} className="flex flex-col md:flex-row grow items-center justify-between border-b py-4 gap-2 md:gap-0">
                     <div className="flex items-center w-full">
-                        <Image src={product.image} alt={product.name} width={80} height={80} className="mr-4" />
+                        <Image
+                            src={product.image}
+                            alt={product.name}
+                            width={80}
+                            height={80}
+                            className="mr-4"
+                        />
                         <div>
                             <h3 className="font-bold text-black">{product.name}</h3>
                             <div className="flex items-center gap-2">
@@ -111,7 +118,10 @@ export default function CartItems({ initalCart }: { initalCart: Cart[] }) {
                     </div>
                     <div className="flex items-center justify-end w-full">
                         <button
-                            onClick={() => toast.promise(updateQuantity.mutateAsync({ productId: product.productId, quantity: product.quantity - 1 }), {
+                            onClick={() => toast.promise(updateQuantity.mutateAsync({
+                                productId: product.productId,
+                                quantity: product.quantity - 1
+                            }), {
                                 loading: "Reducing quantity",
                                 success: "Reduced quantity",
                                 error: "Failed to reduce quantity",
@@ -123,7 +133,10 @@ export default function CartItems({ initalCart }: { initalCart: Cart[] }) {
                         </button>
                         <span className="mx-2 text-black">{product.quantity}</span>
                         <button
-                            onClick={() => toast.promise(updateQuantity.mutateAsync({ productId: product.productId, quantity: product.quantity + 1 }), {
+                            onClick={() => toast.promise(updateQuantity.mutateAsync({
+                                productId: product.productId,
+                                quantity: product.quantity + 1
+                            }), {
                                 loading: "Increasing quantity",
                                 success: "Increased quantity",
                                 error: "Failed to increase quantity",
@@ -133,7 +146,9 @@ export default function CartItems({ initalCart }: { initalCart: Cart[] }) {
                             +
                         </button>
                         <button
-                            onClick={() => toast.promise(removeFromCart.mutateAsync({ productId: product.productId }), {
+                            onClick={() => toast.promise(removeFromCart.mutateAsync({
+                                productId: product.productId
+                            }), {
                                 loading: "Removing from cart",
                                 success: "Removed from cart",
                                 error: "Failed to remove from cart",

@@ -2,7 +2,7 @@ import ProductCard from "@/components/server/ProductCard";
 import { api, HydrateClient } from "@/trpc/server";
 
 export default async function Home() {
-  const products = await api.post.getProducts();
+  const products = await api.cart.getProducts();
 
   return (
     <HydrateClient>
